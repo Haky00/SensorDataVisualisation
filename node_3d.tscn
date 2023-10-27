@@ -1,14 +1,161 @@
-[gd_scene load_steps=3 format=3 uid="uid://c46mw7nbyjxm3"]
+[gd_scene load_steps=13 format=3 uid="uid://c46mw7nbyjxm3"]
 
 [ext_resource type="PackedScene" uid="uid://yjviwh1l8sc8" path="res://iphone 12 mini.glb" id="1_affvy"]
 [ext_resource type="Script" path="res://PhoneHandler.cs" id="2_gh4yd"]
+[ext_resource type="Script" path="res://camera.gd" id="3_hdg7t"]
+[ext_resource type="Script" path="res://FloorLine.cs" id="4_5kugq"]
+[ext_resource type="Texture2D" uid="uid://1usdvg6hpqe6" path="res://checkered.png" id="4_huc0c"]
+[ext_resource type="Script" path="res://ResetButton.cs" id="6_4w8xx"]
+[ext_resource type="Script" path="res://SpeedSlider.cs" id="7_sqlr4"]
+[ext_resource type="Script" path="res://GuidButton.cs" id="8_fba1e"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o7ll7"]
+lightmap_size_hint = Vector2i(7, 7)
+size = Vector2(1, 1)
+subdivide_width = 63
+subdivide_depth = 63
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6ntx"]
+diffuse_mode = 3
+albedo_texture = ExtResource("4_huc0c")
+metallic_specular = 1.0
+uv1_scale = Vector3(128, 128, 128)
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hhors"]
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xr6yd"]
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
 
 [node name="Node3D" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.44825)
 
-[node name="iphone 12 mini" parent="." instance=ExtResource("1_affvy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.45598)
+[node name="PhoneContainer" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00117964, 1.50108, -0.000622898)
+
+[node name="Phone" parent="PhoneContainer" instance=ExtResource("1_affvy")]
+transform = Transform3D(1, 0, 0, 0, 1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0)
 script = ExtResource("2_gh4yd")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 1.11156, 0.268574, 1.48083)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1.71)
+fov = 80.0
+near = 0.001
+script = ExtResource("3_hdg7t")
+
+[node name="Floor" type="CSGMesh3D" parent="."]
+transform = Transform3D(256, 0, 0, 0, 256, 0, 0, 0, 256, 0, 0, 0)
+mesh = SubResource("PlaneMesh_o7ll7")
+material = SubResource("StandardMaterial3D_l6ntx")
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.931024, 0.304404, -0.201328, 0, 0.551646, 0.834078, 0.364958, -0.776547, 0.513596, 0, 5.7702, 4.28477)
+light_indirect_energy = 0.0
+light_bake_mode = 0
+shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 0.0
+
+[node name="FloorLine" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+size = Vector3(0.007, 1.5, 0.007)
+material = SubResource("StandardMaterial3D_hhors")
+script = ExtResource("4_5kugq")
+
+[node name="LabelX" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0.1, 0)
+pixel_size = 0.002
+modulate = Color(1, 0, 0, 1)
+text = "X  >
+"
+font_size = 128
+outline_size = 24
+
+[node name="LabelZ" type="Label3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 0.1, 0.5)
+pixel_size = 0.002
+modulate = Color(0, 0.501961, 1, 1)
+text = "Z  >
+"
+font_size = 128
+outline_size = 24
+
+[node name="Center" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+cast_shadow = 0
+size = Vector3(0.05, 0.05, 0.05)
+material = SubResource("StandardMaterial3D_xr6yd")
+
+[node name="ResetButton" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -78.0
+offset_top = -47.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Reset"
+script = ExtResource("6_4w8xx")
+
+[node name="SpeedSlider" type="HSlider" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -32.0
+offset_right = 316.0
+offset_bottom = -16.0
+grow_vertical = 0
+min_value = 0.05
+max_value = 4.0
+step = 0.01
+value = 1.0
+exp_edit = true
+ticks_on_borders = true
+script = ExtResource("7_sqlr4")
+
+[node name="SpeedLabel" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 379.0
+offset_top = -37.0
+offset_right = 420.0
+offset_bottom = -11.0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "1,00"
+
+[node name="SpeedLabelName" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 327.0
+offset_top = -37.0
+offset_right = 375.0
+offset_bottom = -11.0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Speed"
+
+[node name="GuidEdit" type="LineEdit" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 356.0
+offset_bottom = 47.0
+
+[node name="GuidButton" type="Button" parent="."]
+offset_left = 372.0
+offset_top = 16.0
+offset_right = 403.0
+offset_bottom = 47.0
+text = "OK"
+script = ExtResource("8_fba1e")
