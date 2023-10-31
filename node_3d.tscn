@@ -170,7 +170,6 @@ offset_left = 16.0
 offset_top = 16.0
 offset_right = 356.0
 offset_bottom = 47.0
-text = "47e52a69-fb56-40c9-8519-83531b395640"
 
 [node name="GuidButton" type="Button" parent="."]
 offset_left = 372.0
