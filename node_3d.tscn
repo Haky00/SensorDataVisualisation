@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c46mw7nbyjxm3"]
+[gd_scene load_steps=16 format=3 uid="uid://c46mw7nbyjxm3"]
 
 [ext_resource type="PackedScene" uid="uid://yjviwh1l8sc8" path="res://iphone 12 mini.glb" id="1_affvy"]
 [ext_resource type="Script" path="res://PhoneHandler.cs" id="2_gh4yd"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://SpeedSlider.cs" id="7_sqlr4"]
 [ext_resource type="Script" path="res://GuidButton.cs" id="8_fba1e"]
 [ext_resource type="Script" path="res://TimelineSlider.cs" id="9_c3jgv"]
+[ext_resource type="Script" path="res://BoneScript.cs" id="11_yl8g5"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o7ll7"]
 lightmap_size_hint = Vector2i(7, 7)
@@ -191,3 +192,31 @@ offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("9_c3jgv")
+
+[node name="Skeleton" type="Node3D" parent="."]
+
+[node name="Legs" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+Length = 2.0
+
+[node name="Torso" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+AttachedPath = NodePath("../Legs")
+Length = 0.55
+
+[node name="Head" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+AttachedPath = NodePath(".")
+Length = 0.3
+
+[node name="Shoulder" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+
+[node name="UpperArm" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+
+[node name="LowerArm" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+
+[node name="Hand" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
