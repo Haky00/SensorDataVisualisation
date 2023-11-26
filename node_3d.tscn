@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c46mw7nbyjxm3"]
+[gd_scene load_steps=21 format=3 uid="uid://c46mw7nbyjxm3"]
 
 [ext_resource type="PackedScene" uid="uid://yjviwh1l8sc8" path="res://iphone 12 mini.glb" id="1_affvy"]
 [ext_resource type="Script" path="res://PhoneHandler.cs" id="2_gh4yd"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://SpeedSlider.cs" id="7_sqlr4"]
 [ext_resource type="Script" path="res://GuidButton.cs" id="8_fba1e"]
 [ext_resource type="Script" path="res://TimelineSlider.cs" id="9_c3jgv"]
+[ext_resource type="Script" path="res://Skeleton.cs" id="11_jqh5q"]
 [ext_resource type="Script" path="res://BoneScript.cs" id="11_yl8g5"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o7ll7"]
@@ -32,6 +33,18 @@ albedo_color = Color(1, 0, 0, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xr6yd"]
 shading_mode = 0
 albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x4csl"]
+albedo_color = Color(0.823529, 0.533333, 0.72549, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3h0bf"]
+albedo_color = Color(0.490196, 0.729412, 0.847059, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grtpr"]
+albedo_color = Color(0.972549, 0.866667, 0.827451, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_db72s"]
+albedo_color = Color(0.921569, 0.827451, 0.498039, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -194,29 +207,29 @@ grow_vertical = 0
 script = ExtResource("9_c3jgv")
 
 [node name="Skeleton" type="Node3D" parent="."]
+script = ExtResource("11_jqh5q")
 
 [node name="Legs" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
-Length = 2.0
+Length = 1.0
+BoxMaterial = SubResource("StandardMaterial3D_x4csl")
 
 [node name="Torso" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
 AttachedPath = NodePath("../Legs")
 Length = 0.55
+BoxMaterial = SubResource("StandardMaterial3D_3h0bf")
 
 [node name="Head" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
-AttachedPath = NodePath(".")
+AttachedPath = NodePath("../Torso")
 Length = 0.3
+BoxMaterial = SubResource("StandardMaterial3D_grtpr")
 
 [node name="Shoulder" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
-
-[node name="UpperArm" type="Node3D" parent="Skeleton"]
-script = ExtResource("11_yl8g5")
-
-[node name="LowerArm" type="Node3D" parent="Skeleton"]
-script = ExtResource("11_yl8g5")
-
-[node name="Hand" type="Node3D" parent="Skeleton"]
-script = ExtResource("11_yl8g5")
+AttachedPath = NodePath("../Torso")
+AttachedOffset = 0.1
+AttachedRotation = Vector3(90, 0, 0)
+Length = 0.2
+BoxMaterial = SubResource("StandardMaterial3D_db72s")
