@@ -2,6 +2,8 @@ using Godot;
 using System;
 using Num = System.Numerics;
 
+namespace SensorDataVisualisation;
+
 public partial class BoneScript : Node3D
 {
 	[Export]
@@ -12,12 +14,27 @@ public partial class BoneScript : Node3D
 	public Vector3 AttachedRotation { get; set; }
 	[Export]
 	public float Length { get; set; }
-	[Export]
-	public float MaxAngle { get; set; }
-	[Export]
-	public Vector3 AngleFactor { get; set; }
+
 	[Export]
 	public Material BoxMaterial = new();
+
+	[Export]
+	public Vector3 MaxAngles { get; set; }
+
+	[Export]
+	public float Roll { get; set; }
+	[Export]
+	public float Angle { get; set; }
+	[Export]
+	public float Amount { get; set; }
+
+	[Export]
+	public float RollFactor { get; set; } = 1f;
+	[Export]
+	public float AngleFactor { get; set; } = 1f;
+	[Export]
+	public float AmountFactor { get; set; } = 1f;
+
 	public Vector3 Loc;
 	public Num.Quaternion Rot;
 	private CsgBox3D box;
@@ -45,6 +62,16 @@ public partial class BoneScript : Node3D
 	{
 	}
 
+	private double time = 0;
+
+	public void Animate(double delta)
+	{
+		time += delta;
+		Roll = (float)Math.Sin(time * RollFactor);
+		Amount = (float)Math.Sin(time * AmountFactor);
+		Angle = (float)Math.Sin(time * AngleFactor) * 360;
+	}
+
 	public void Update()
 	{
 		Rot = Num.Quaternion.Identity;
@@ -59,13 +86,27 @@ public partial class BoneScript : Node3D
 			transform.Origin = Loc;
 			Transform = transform;
 		}
-		Num.Quaternion myRot = Num.Quaternion.CreateFromYawPitchRoll(AttachedRotation.Y * (float)Math.PI / 180f, AttachedRotation.X * (float)Math.PI / 180f, AttachedRotation.Z * (float)Math.PI / 180f);
-		Rot = Num.Quaternion.Concatenate(Rot, myRot);
+		Num.Quaternion attachedRot = Num.Quaternion.CreateFromYawPitchRoll(AttachedRotation.Y * (float)Math.PI / 180f, AttachedRotation.X * (float)Math.PI / 180f, AttachedRotation.Z * (float)Math.PI / 180f);
+
+		float roll = Sigmoid(Roll) * (MaxAngles.Y * (float)Math.PI / 180.0f);
+		float angleRadians = Angle * (float)Math.PI / 180.0f;
+		float xRot = (float)Math.Cos(angleRadians) * Sigmoid(Amount) * MaxAngles.X * (float)Math.PI / 180.0f;
+		float zRot = (float)Math.Sin(angleRadians) * Sigmoid(Amount) * MaxAngles.Z * (float)Math.PI / 180.0f;
+		Num.Quaternion angleRot = Num.Quaternion.CreateFromYawPitchRoll(0, xRot, zRot);
+		Num.Quaternion rollRot = Num.Quaternion.CreateFromYawPitchRoll(roll, 0, 0);
+
+		Rot = Num.Quaternion.Concatenate(Num.Quaternion.Concatenate(Num.Quaternion.Concatenate(rollRot, angleRot), attachedRot), Rot);
+	}
+
+	private static float Sigmoid(float value)
+	{
+		float k = (float)Math.Exp(value);
+		return (k / (1.0f + k) - 0.5f) * 2f;
 	}
 
 	public void UpdateBox()
 	{
-		Num.Vector3 rotLoc = Num.Vector3.Transform(new(0, Length/2, 0), Rot);
+		Num.Vector3 rotLoc = Num.Vector3.Transform(new(0, Length / 2, 0), Rot);
 		var transform = box.Transform;
 		transform.Origin = new(rotLoc.X, rotLoc.Y, rotLoc.Z);
 		transform.Basis = new(new Quaternion(Rot.X, Rot.Y, Rot.Z, Rot.W));

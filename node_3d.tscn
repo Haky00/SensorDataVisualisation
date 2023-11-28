@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c46mw7nbyjxm3"]
+[gd_scene load_steps=25 format=3 uid="uid://c46mw7nbyjxm3"]
 
 [ext_resource type="PackedScene" uid="uid://yjviwh1l8sc8" path="res://iphone 12 mini.glb" id="1_affvy"]
 [ext_resource type="Script" path="res://PhoneHandler.cs" id="2_gh4yd"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://TimelineSlider.cs" id="9_c3jgv"]
 [ext_resource type="Script" path="res://Skeleton.cs" id="11_jqh5q"]
 [ext_resource type="Script" path="res://BoneScript.cs" id="11_yl8g5"]
+[ext_resource type="Script" path="res://SkeletonPhoneScript.cs" id="13_vbayb"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o7ll7"]
 lightmap_size_hint = Vector2i(7, 7)
@@ -46,6 +47,15 @@ albedo_color = Color(0.972549, 0.866667, 0.827451, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_db72s"]
 albedo_color = Color(0.921569, 0.827451, 0.498039, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ya62"]
+albedo_color = Color(1, 0.768627, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p0nsn"]
+albedo_color = Color(0.792157, 1, 0.709804, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o1lol"]
+albedo_color = Color(0.705882, 0.733333, 1, 1)
+
 [node name="Node3D" type="Node3D"]
 
 [node name="PhoneContainer" type="Node3D" parent="."]
@@ -53,6 +63,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.0011
 
 [node name="Phone" parent="PhoneContainer" instance=ExtResource("1_affvy")]
 transform = Transform3D(1, 0, 0, 0, 1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0)
+visible = false
 script = ExtResource("2_gh4yd")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -76,6 +87,7 @@ shadow_normal_bias = 0.0
 
 [node name="FloorLine" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+visible = false
 size = Vector3(0.007, 1.5, 0.007)
 material = SubResource("StandardMaterial3D_hhors")
 script = ExtResource("4_5kugq")
@@ -208,6 +220,7 @@ script = ExtResource("9_c3jgv")
 
 [node name="Skeleton" type="Node3D" parent="."]
 script = ExtResource("11_jqh5q")
+Animate = true
 
 [node name="Legs" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
@@ -219,17 +232,51 @@ script = ExtResource("11_yl8g5")
 AttachedPath = NodePath("../Legs")
 Length = 0.55
 BoxMaterial = SubResource("StandardMaterial3D_3h0bf")
+MaxAngles = Vector3(15, 55, 28)
 
 [node name="Head" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
 AttachedPath = NodePath("../Torso")
 Length = 0.3
 BoxMaterial = SubResource("StandardMaterial3D_grtpr")
+MaxAngles = Vector3(55, 75, 65)
 
 [node name="Shoulder" type="Node3D" parent="Skeleton"]
 script = ExtResource("11_yl8g5")
 AttachedPath = NodePath("../Torso")
 AttachedOffset = 0.1
-AttachedRotation = Vector3(90, 0, 0)
+AttachedRotation = Vector3(98, 15, 0)
 Length = 0.2
 BoxMaterial = SubResource("StandardMaterial3D_db72s")
+MaxAngles = Vector3(17, 0, 0)
+
+[node name="UpperArm" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+AttachedPath = NodePath("../Shoulder")
+AttachedRotation = Vector3(15, 10, -35)
+Length = 0.302
+BoxMaterial = SubResource("StandardMaterial3D_2ya62")
+MaxAngles = Vector3(65, 60, 70)
+
+[node name="LowerArm" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+AttachedPath = NodePath("../UpperArm")
+AttachedRotation = Vector3(0, 0, -70)
+Length = 0.269
+BoxMaterial = SubResource("StandardMaterial3D_p0nsn")
+MaxAngles = Vector3(0, 0, 70)
+
+[node name="Hand" type="Node3D" parent="Skeleton"]
+script = ExtResource("11_yl8g5")
+AttachedPath = NodePath("../LowerArm")
+AttachedRotation = Vector3(0, 0, -15)
+Length = 0.211
+BoxMaterial = SubResource("StandardMaterial3D_o1lol")
+MaxAngles = Vector3(25, 90, 75)
+
+[node name="Phone" parent="Skeleton" instance=ExtResource("1_affvy")]
+transform = Transform3D(1, 0, 0, 0, 1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0)
+script = ExtResource("13_vbayb")
+AttachedPath = NodePath("../Hand")
+AttachedOffset = 0.5
+AttachedRotation = Vector3(0, 90, -90)
