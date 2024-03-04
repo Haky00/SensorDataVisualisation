@@ -116,6 +116,22 @@ public partial class PhoneHandler : Node3D
 		T = TMin;
 		positions = _pos;
 		rotations = _rot;
+
+		List<double> velocities = new();
+		for(int i = 1; i < _pos.Count; i++)
+		{
+			velocities.Add(_pos[i].Pos.DistanceTo(_pos[i - 1].Pos));
+		}
+		List<double> accelerations = new();
+		for(int i = 1; i < velocities.Count; i++)
+		{
+			accelerations.Add(velocities[i] - velocities[i - 1]);
+		}
+		Descriptive d = new(accelerations.ToArray());
+		d.Analyze();
+		GD.Print(d.Result.Mean);
+		GD.Print(d.Result.StdDev);
+		List<double> angleSpeeds = new();
 	}
 
 	public override void _Process(double delta)

@@ -60,7 +60,7 @@ public partial class Skeleton : Node3D
 
 
 
-		if (printed == false || true)
+		if (Animate)
 		{
 			printed = true;
 			Num.Quaternion phoneRotation = phone.Rot;
