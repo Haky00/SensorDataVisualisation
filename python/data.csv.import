@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dgyq6vd8qdcmj"
+
+[deps]
+
+files=["res://python/data.UploadTime.translation", "res://python/data.Movement.translation", "res://python/data.StartTime.translation", "res://python/data.EndTime.translation", "res://python/data.Gender.translation", "res://python/data.Age.translation", "res://python/data.Weight.translation", "res://python/data.Height.translation", "res://python/data.Accelerometer.translation", "res://python/data.GravitySensor.translation", "res://python/data.Gyroscope.translation", "res://python/data.LinearAccelerationSensor.translation", "res://python/data.AbsoluteOrientationSensor.translation", "res://python/data.RelativeOrientationSensor.translation", "res://python/data.Phone.translation", "res://python/data.Note.translation"]
+
+source_file="res://python/data.csv"
+dest_files=["res://python/data.UploadTime.translation", "res://python/data.Movement.translation", "res://python/data.StartTime.translation", "res://python/data.EndTime.translation", "res://python/data.Gender.translation", "res://python/data.Age.translation", "res://python/data.Weight.translation", "res://python/data.Height.translation", "res://python/data.Accelerometer.translation", "res://python/data.GravitySensor.translation", "res://python/data.Gyroscope.translation", "res://python/data.LinearAccelerationSensor.translation", "res://python/data.AbsoluteOrientationSensor.translation", "res://python/data.RelativeOrientationSensor.translation", "res://python/data.Phone.translation", "res://python/data.Note.translation"]
+
+[params]
+
+compress=true
+delimiter=0

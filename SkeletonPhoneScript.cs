@@ -13,6 +13,10 @@ public partial class SkeletonPhoneScript : Node3D
 	[Export]
 	public Vector3 AttachedRotation { get; set; }
 
+	public Num.Quaternion Rot;
+
+	public Vector3 Loc;
+
 	private BoneScript attached;
 
 
@@ -36,8 +40,8 @@ public partial class SkeletonPhoneScript : Node3D
 		{
 			return;
 		}
-		Vector3 Loc = attached.Loc;
-		Num.Quaternion Rot = attached.Rot;
+		 Loc = attached.Loc;
+		Rot = attached.Rot;
 		Num.Matrix4x4 rotMat = Num.Matrix4x4.CreateFromQuaternion(Rot);
 		Num.Vector3 rotLoc = Num.Vector3.Transform(new(0, attached.Length * (1 - AttachedOffset), 0), rotMat);
 		Loc += new Vector3(rotLoc.X, rotLoc.Y, rotLoc.Z);

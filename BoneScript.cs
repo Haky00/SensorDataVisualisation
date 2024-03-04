@@ -72,6 +72,8 @@ public partial class BoneScript : Node3D
 		Angle = (float)Math.Sin(time * AngleFactor) * 360;
 	}
 
+	bool printed = false;
+
 	public void Update()
 	{
 		Rot = Num.Quaternion.Identity;

@@ -6,11 +6,13 @@ namespace SensorDataVisualisation;
 public partial class SpeedSlider : HSlider
 {
 	private PhoneHandler phoneHandler;
+	private Skeleton skeleton;
 	private Label speedLabel;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		phoneHandler = GetNode<PhoneHandler>("../PhoneContainer/Phone");
+		skeleton = GetNode<Skeleton>("../Skeleton");
 		speedLabel = GetNode<Label>("../SpeedLabel");
 		DragEnded += OnDragEnded;
 		DragStarted += OnDragStarted;
@@ -34,6 +36,7 @@ public partial class SpeedSlider : HSlider
 		if (dragging)
 		{
 			phoneHandler.SimulationSpeed = Value;
+			skeleton.Speed = Value;
 			speedLabel.Text = $"{Value:N2}";
 		}
 	}
