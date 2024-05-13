@@ -4,6 +4,7 @@ using static Postgrest.Constants;
 
 namespace SensorDataVisualisation;
 
+// This controls the "OK" button next to the GUID field in data mode
 public partial class GuidButton : Button
 {
 	private PhoneHandler phoneHandler;
@@ -25,6 +26,7 @@ public partial class GuidButton : Button
             return;
         }
         var url = "https://rhtekizmxsrxzkkmhdvc.supabase.co";
+		// This is a public facing key, so it is fine to just use as plaintext
 		var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJodGVraXpteHNyeHpra21oZHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcyMzQ1NjksImV4cCI6MjAxMjgxMDU2OX0.hl_WAQL84C8LpoqbECkC2o472d3pyjbmjW8n0Pmx03I";
 		var dbOptions = new Supabase.SupabaseOptions
 		{
@@ -35,10 +37,5 @@ public partial class GuidButton : Button
 		var result = await supabase.From<SensorDataDb>().Filter("Id", Operator.Equals, guid.ToString()).Single();
 		var dbData = result;
 		phoneHandler.SetData(new(dbData));
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

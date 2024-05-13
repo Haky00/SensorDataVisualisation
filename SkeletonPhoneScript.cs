@@ -4,6 +4,7 @@ using Num = System.Numerics;
 
 namespace SensorDataVisualisation;
 
+// Simplified bone script for the phone object, as it does not use a box for displaying itself
 public partial class SkeletonPhoneScript : Node3D
 {
 	[Export]
@@ -27,11 +28,6 @@ public partial class SkeletonPhoneScript : Node3D
 		{
 			attached = GetNode<BoneScript>(AttachedPath);
 		}
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 
 	public void Update()

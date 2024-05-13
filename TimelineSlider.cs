@@ -3,6 +3,7 @@ using System;
 
 namespace SensorDataVisualisation;
 
+// Timeline slider for data playback, allows user to seek
 public partial class TimelineSlider : HSlider
 {
 	private PhoneHandler phoneHandler;

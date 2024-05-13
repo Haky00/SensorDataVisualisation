@@ -4,20 +4,22 @@ using Num = System.Numerics;
 
 namespace SensorDataVisualisation;
 
-public partial class BoneScript : Node3D
+// This script controls bone movement and drawing, it is assigned to each bone
+public partial class BoneScript : SkeletonPart
 {
+	// Path to the bone SkeletonPart to which this bone is attached to (can be null)
 	[Export]
 	public NodePath AttachedPath { get; set; }
+	// Offset from the end of the parent bone, range between 0 (at the end) to 1 (at the start)
 	[Export]
 	public float AttachedOffset { get; set; } = 0;
+	// Additional rotation from the parent (Y = roll)
 	[Export]
 	public Vector3 AttachedRotation { get; set; }
-	[Export]
-	public float Length { get; set; }
-
+	// Material for the box that represents this bone
 	[Export]
 	public Material BoxMaterial = new();
-
+	// Max angles for each of the 3 euler rotation directions (X and Z are horizontal rotations and Y is roll)
 	[Export]
 	public Vector3 MaxAngles { get; set; }
 
@@ -28,22 +30,12 @@ public partial class BoneScript : Node3D
 	[Export]
 	public float Amount { get; set; }
 
-	[Export]
-	public float RollFactor { get; set; } = 1f;
-	[Export]
-	public float AngleFactor { get; set; } = 1f;
-	[Export]
-	public float AmountFactor { get; set; } = 1f;
-
-	public Vector3 Loc;
-	public Num.Quaternion Rot;
 	private CsgBox3D box;
-	private BoneScript attached;
+	private SkeletonPart attached;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
 		box = new()
 		{
 			Size = new(0.04f, Length, 0.04f),
@@ -53,27 +45,11 @@ public partial class BoneScript : Node3D
 		AddChild(box);
 		if (AttachedPath is not null && !AttachedPath.IsEmpty)
 		{
-			attached = GetNode<BoneScript>(AttachedPath);
+			attached = GetNode<SkeletonPart>(AttachedPath);
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
-	private double time = 0;
-
-	public void Animate(double delta)
-	{
-		time += delta;
-		Roll = (float)Math.Sin(time * RollFactor);
-		Amount = (float)Math.Sin(time * AmountFactor);
-		Angle = (float)Math.Sin(time * AngleFactor) * 360;
-	}
-
-	bool printed = false;
-
+	// Performs an update of the bone, roll, angle and amount must be set to change the state
 	public void Update()
 	{
 		Rot = Num.Quaternion.Identity;
@@ -90,14 +66,13 @@ public partial class BoneScript : Node3D
 		}
 		Num.Quaternion attachedRot = Num.Quaternion.CreateFromYawPitchRoll(AttachedRotation.Y * (float)Math.PI / 180f, AttachedRotation.X * (float)Math.PI / 180f, AttachedRotation.Z * (float)Math.PI / 180f);
 
-		float roll = Sigmoid(Roll) * (MaxAngles.Y * (float)Math.PI / 180.0f);
-		float angleRadians = Angle * (float)Math.PI / 180.0f;
-		float xRot = (float)Math.Cos(angleRadians) * Sigmoid(Amount) * MaxAngles.X * (float)Math.PI / 180.0f;
-		float zRot = (float)Math.Sin(angleRadians) * Sigmoid(Amount) * MaxAngles.Z * (float)Math.PI / 180.0f;
-		Num.Quaternion angleRot = Num.Quaternion.CreateFromYawPitchRoll(0, xRot, zRot);
-		Num.Quaternion rollRot = Num.Quaternion.CreateFromYawPitchRoll(roll, 0, 0);
-
-		Rot = Num.Quaternion.Concatenate(Num.Quaternion.Concatenate(Num.Quaternion.Concatenate(rollRot, angleRot), attachedRot), Rot);
+		float roll = Sigmoid(Roll) * (MaxAngles.Y * MathF.PI / 180.0f);
+		float angleRadians = Angle;
+		float xRotation = MathF.Cos(angleRadians) * Sigmoid(Amount) * MaxAngles.X * MathF.PI / 180.0f;
+		float zRotation = MathF.Sin(angleRadians) * Sigmoid(Amount) * MaxAngles.Z * MathF.PI / 180.0f;
+		Num.Quaternion yawPitchRotation = Num.Quaternion.CreateFromYawPitchRoll(0, xRotation, zRotation);
+		Num.Quaternion rollRotation = Num.Quaternion.CreateFromYawPitchRoll(roll, 0, 0);
+		Rot *= attachedRot * yawPitchRotation * rollRotation;
 	}
 
 	private static float Sigmoid(float value)

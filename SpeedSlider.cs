@@ -3,6 +3,7 @@ using System;
 
 namespace SensorDataVisualisation;
 
+// Allows the user to change the speed of simulation or playback (can also go negative)
 public partial class SpeedSlider : HSlider
 {
 	private PhoneHandler phoneHandler;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://c46mw7nbyjxm3"]
+[gd_scene load_steps=29 format=3 uid="uid://c46mw7nbyjxm3"]
 
 [ext_resource type="PackedScene" uid="uid://yjviwh1l8sc8" path="res://iphone 12 mini.glb" id="1_6g0av"]
 [ext_resource type="Script" path="res://PhoneHandler.cs" id="2_jsrrn"]
@@ -11,8 +11,10 @@
 [ext_resource type="Script" path="res://GuidButton.cs" id="9_x144y"]
 [ext_resource type="Script" path="res://TimelineSlider.cs" id="10_fke2j"]
 [ext_resource type="Script" path="res://Skeleton.cs" id="11_n7j7a"]
+[ext_resource type="Script" path="res://LegScript.cs" id="12_re6sj"]
 [ext_resource type="Script" path="res://BoneScript.cs" id="12_wjpf6"]
 [ext_resource type="Script" path="res://SkeletonPhoneScript.cs" id="13_mja22"]
+[ext_resource type="Script" path="res://SwitchModeButton.cs" id="15_qpgkp"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o7ll7"]
 lightmap_size_hint = Vector2i(7, 7)
@@ -35,8 +37,8 @@ albedo_color = Color(1, 0, 0, 1)
 shading_mode = 0
 albedo_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x4csl"]
-albedo_color = Color(0.823529, 0.533333, 0.72549, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o3d36"]
+albedo_color = Color(0.968627, 0.619608, 0.627451, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3h0bf"]
 albedo_color = Color(0.490196, 0.729412, 0.847059, 1)
@@ -58,10 +60,13 @@ albedo_color = Color(0.792157, 1, 0.709804, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o1lol"]
 albedo_color = Color(0.705882, 0.733333, 1, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ckwfn"]
+albedo_color = Color(0.466667, 0.588235, 0.945098, 1)
+
 [node name="Root" type="Node3D"]
 
 [node name="PhoneContainer" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00117964, 1.50108, -0.000622898)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.5, 0)
 
 [node name="Phone" parent="PhoneContainer" instance=ExtResource("1_6g0av")]
 transform = Transform3D(1, 0, 0, 0, 1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0)
@@ -196,6 +201,7 @@ offset_left = 16.0
 offset_top = 16.0
 offset_right = 356.0
 offset_bottom = 47.0
+placeholder_text = "Enter reading guid"
 
 [node name="GuidButton" type="Button" parent="."]
 offset_left = 372.0
@@ -219,68 +225,68 @@ grow_vertical = 0
 script = ExtResource("10_fke2j")
 
 [node name="Skeleton" type="Node3D" parent="."]
-visible = false
 script = ExtResource("11_n7j7a")
+Animate = true
+ConstantWalk = true
 
 [node name="Legs" type="Node3D" parent="Skeleton"]
-script = ExtResource("12_wjpf6")
+script = ExtResource("12_re6sj")
+BoxMaterial = SubResource("StandardMaterial3D_o3d36")
 Length = 1.0
-BoxMaterial = SubResource("StandardMaterial3D_x4csl")
 
 [node name="Torso" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
 AttachedPath = NodePath("../Legs")
-Length = 0.55
 BoxMaterial = SubResource("StandardMaterial3D_3h0bf")
-MaxAngles = Vector3(15, 55, 28)
+MaxAngles = Vector3(15, 25, 28)
+Length = 0.55
 
 [node name="Head" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
 AttachedPath = NodePath("../Torso")
-Length = 0.3
 BoxMaterial = SubResource("StandardMaterial3D_grtpr")
-MaxAngles = Vector3(55, 75, 65)
+Length = 0.3
 
 [node name="Eyes" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
 AttachedPath = NodePath("../Head")
 AttachedOffset = 0.5
 AttachedRotation = Vector3(0, 0, -90)
-Length = 0.04
 BoxMaterial = SubResource("StandardMaterial3D_756w7")
+Length = 0.04
 
 [node name="Shoulder" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
 AttachedPath = NodePath("../Torso")
 AttachedOffset = 0.1
 AttachedRotation = Vector3(98, 15, 0)
-Length = 0.2
 BoxMaterial = SubResource("StandardMaterial3D_db72s")
 MaxAngles = Vector3(17, 0, 0)
+Length = 0.2
 
-[node name="UpperArm" type="Node3D" parent="Skeleton"]
+[node name="Upper Arm" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
 AttachedPath = NodePath("../Shoulder")
 AttachedRotation = Vector3(15, 10, -35)
-Length = 0.3
 BoxMaterial = SubResource("StandardMaterial3D_2ya62")
 MaxAngles = Vector3(65, 60, 70)
+Length = 0.3
 
-[node name="LowerArm" type="Node3D" parent="Skeleton"]
+[node name="Lower Arm" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
-AttachedPath = NodePath("../UpperArm")
+AttachedPath = NodePath("../Upper Arm")
 AttachedRotation = Vector3(0, 0, -70)
-Length = 0.27
 BoxMaterial = SubResource("StandardMaterial3D_p0nsn")
 MaxAngles = Vector3(0, 0, 70)
+Length = 0.27
 
 [node name="Hand" type="Node3D" parent="Skeleton"]
 script = ExtResource("12_wjpf6")
-AttachedPath = NodePath("../LowerArm")
+AttachedPath = NodePath("../Lower Arm")
 AttachedRotation = Vector3(0, 0, -15)
-Length = 0.21
 BoxMaterial = SubResource("StandardMaterial3D_o1lol")
 MaxAngles = Vector3(25, 90, 75)
+Length = 0.21
 
 [node name="Phone" parent="Skeleton" instance=ExtResource("1_6g0av")]
 transform = Transform3D(1, 0, 0, 0, 1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0)
@@ -288,3 +294,135 @@ script = ExtResource("13_mja22")
 AttachedPath = NodePath("../Hand")
 AttachedOffset = 0.5
 AttachedRotation = Vector3(0, 90, -90)
+
+[node name="WalkingBounds" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.05)
+visible = false
+size = Vector3(8, 0.1, 0.1)
+material = SubResource("StandardMaterial3D_ckwfn")
+
+[node name="WalkingBounds2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.05, 0, 0)
+visible = false
+size = Vector3(0.1, 0.1, 8.2)
+material = SubResource("StandardMaterial3D_ckwfn")
+
+[node name="WalkingBounds3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.05)
+visible = false
+size = Vector3(8, 0.1, 0.1)
+material = SubResource("StandardMaterial3D_ckwfn")
+
+[node name="WalkingBounds4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05, 0, 0)
+visible = false
+size = Vector3(0.1, 0.1, 8.2)
+material = SubResource("StandardMaterial3D_ckwfn")
+
+[node name="SwitchModeButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -156.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 47.0
+grow_horizontal = 0
+text = "Simulation Mode"
+script = ExtResource("15_qpgkp")
+SimulationNodes3D = [NodePath("../Skeleton"), NodePath("../WalkingBounds"), NodePath("../WalkingBounds2"), NodePath("../WalkingBounds3"), NodePath("../WalkingBounds4")]
+SimulationNodes2D = [NodePath("../ParametersList"), NodePath("../DeleteParameters"), NodePath("../UseParameters"), NodePath("../RefreshParameters"), NodePath("../ExportButton"), NodePath("../ExportCurrentButton"), NodePath("../ResetPositionButton"), NodePath("../AnimateButton"), NodePath("../ConstantWalkButton")]
+DataDisplayNodes3D = [NodePath("../PhoneContainer"), NodePath("../FloorLine")]
+DataDisplayNodes2D = [NodePath("../ResetButton"), NodePath("../GuidEdit"), NodePath("../GuidButton"), NodePath("../TimelineSlider"), NodePath("../PlayPauseButton")]
+
+[node name="ExportButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -156.0
+offset_top = 63.0
+offset_right = -16.0
+offset_bottom = 94.0
+grow_horizontal = 0
+text = "Export All"
+
+[node name="ExportCurrentButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -156.0
+offset_top = 110.0
+offset_right = -16.0
+offset_bottom = 141.0
+grow_horizontal = 0
+text = "Export Current"
+
+[node name="ParametersList" type="ItemList" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 356.0
+offset_bottom = 176.0
+
+[node name="DeleteParameters" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 192.0
+offset_right = 119.0
+offset_bottom = 223.0
+text = "Delete"
+
+[node name="ResetPositionButton" type="Button" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -47.0
+offset_right = 134.0
+offset_bottom = -16.0
+grow_vertical = 0
+text = "Reset Position"
+
+[node name="AnimateButton" type="CheckButton" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -158.0
+offset_right = -16.0
+offset_bottom = -127.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Animate"
+
+[node name="ConstantWalkButton" type="CheckButton" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -111.0
+offset_right = -16.0
+offset_bottom = -80.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Constant walk"
+
+[node name="RefreshParameters" type="Button" parent="."]
+offset_left = 135.0
+offset_top = 192.0
+offset_right = 237.0
+offset_bottom = 223.0
+text = "Refresh"
+
+[node name="UseParameters" type="Button" parent="."]
+offset_left = 253.0
+offset_top = 192.0
+offset_right = 356.0
+offset_bottom = 223.0
+text = "Use"
